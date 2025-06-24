@@ -5,7 +5,7 @@
 #include "timer.h"
 
 #define MAX_LINHA 100
-#define MAX_REGISTROS 500000
+#define MAX_REGISTROS 1000000
 
 typedef struct {
     float altura;
