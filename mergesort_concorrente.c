@@ -4,19 +4,19 @@
 #include <pthread.h>
 #include "timer.h"
 
-#define MAX_LINHA 100
-#define MAX_REGISTROS 1000000
+#define MAX_LINHA 100        
+#define MAX_REGISTROS 1000000     
 
 typedef struct {
-    float altura;
-    float peso;
-    int idade;
+    float altura;         //Altura da pessoa
+    float peso;           //Peso da pessoa
+    int idade;            //Idade da pessoa
 } Pessoa;
 
 typedef struct {
-    Pessoa *arr;
-    int l;
-    int r;
+    Pessoa *arr;        //Ponteiro para o array de pessoas
+    int l;              //Indice da esquerda
+    int r;              //Indice da direita (fim do subarray)
 } ThreadArgs;
 
 Pessoa pessoas[MAX_REGISTROS];
@@ -118,13 +118,15 @@ void mergeSort(Pessoa arr[], int l, int r) {
     }
 }
 
+//Função executada por cada thread criada
 void *mergeSortConcurrent(void *args) {
     ThreadArgs *targs = (ThreadArgs *)args;
-    mergeSort(targs->arr, targs->l, targs->r);
+    mergeSort(targs->arr, targs->l, targs->r); //Chama a função mergeSort recursivamente para a subparte atribuída a thread
     free(targs);
     return NULL;
 }
 
+//Funcao que lê o csv
 int ler_csv(const char *nome_arquivo, Pessoa pessoas[]) {
     FILE *fp = fopen(nome_arquivo, "r");
     if (!fp) {
@@ -146,6 +148,7 @@ int ler_csv(const char *nome_arquivo, Pessoa pessoas[]) {
     return count;
 }
 
+//Funçao que escreve no csv
 void escrever_csv(const char *nome_arquivo, Pessoa pessoas[], int n) {
     FILE *fp = fopen(nome_arquivo, "w");
     if (!fp) {
@@ -172,7 +175,7 @@ int main(int argc, char *argv[]) {
     const char *arquivo_entrada = argv[1];
     int num_threads = atoi(argv[2]);
 
-    // Configura threads_disponiveis com o valor do usuário
+    //Configura threads_disponiveis com o valor passado pelo usuario
     threads_disponiveis = num_threads;
 
     pthread_mutex_init(&mutex, NULL);
